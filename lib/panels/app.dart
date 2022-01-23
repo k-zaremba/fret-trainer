@@ -92,10 +92,11 @@ class AppState extends State<App> {
   void initState() {
 
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
+
     List<Note> notes = Note.getNotesList([Note.OCTAVE2, Note.OCTAVE3, Note.OCTAVE4, Note.OCTAVE5]); // build game domain
     noteValidator = NoteValidator(notes);
 
-    targetNote = noteValidator?.getTarget(Note.NULL);
+    targetNote = noteValidator!.getTarget(Note.NULL);
     isOnNote = false;
     timeOnNote = 0;
 
@@ -145,12 +146,6 @@ class AppState extends State<App> {
                         : SizedBox(width: 0, height: 0,),
 
                     SizedBox(height: 10),
-
-                    started!
-                        ? Text(
-                        '${Note.FsGb2}',
-                        style: TextStyle(fontSize: 40))
-                        : SizedBox(width: 0, height: 0,),
 
                     started!
                         ? Text(

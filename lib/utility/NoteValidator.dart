@@ -4,9 +4,12 @@ import 'dart:math';
 import 'package:fretapp/utility/Note.dart';
 
 void main() {
-  List<Note> notesList = Note.getNotesList([[Note.A4, Note.E2]]);
+  List<Note> notesList = Note.getNotesList([Note.OCTAVE2, Note.OCTAVE3, Note.OCTAVE4, Note.OCTAVE5, Note.OCTAVE6]);
+
   NoteValidator validator = NoteValidator(notesList);
-  print(validator.getTarget(Note.A4));
+  print(validator.freqs());
+  print(validator.findClosestNote(500.0).freq());
+  print(validator.getTarget(Note.NULL));
 }
 
 class NoteValidator {
@@ -18,10 +21,13 @@ class NoteValidator {
     _notesFreq = Note.getNotesFrequencies(notesList);
   }
 
-
   @override
   String toString() {
     return _notesList.toString();
+  }
+
+  List<double>? freqs() {
+    return _notesFreq;
   }
 
   Note getTarget(Note currentTarget){

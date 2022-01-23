@@ -10,6 +10,10 @@ class Note {
 
   @override
   bool operator ==(Object other) {
+    if (other is Note) {
+      return (other.freq() == _value);
+    }
+
     final o = other as double;
     return (o == _value);
   }
@@ -51,7 +55,7 @@ class Note {
   static const F2 = Note._internal('F2', 87.31);
   static const FsGb2 = Note._internal('F♯2 / G♭2', 92.50);
   static const G2 = Note._internal('G2', 98.0);
-  static const GsAb2 = Note._internal('G♯2 / A♭2', 92.50);
+  static const GsAb2 = Note._internal('G♯2 / A♭2', 103.83);
   static const A2 = Note._internal('A2', 110.0);
   static const AsBb2 = Note._internal('A♯2 / B♭2', 116.54);
   static const B2 = Note._internal('B2', 123.47);
