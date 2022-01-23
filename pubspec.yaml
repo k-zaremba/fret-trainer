@@ -82,6 +82,10 @@ flutter:
    - family: Orbitron
      fonts:
        - asset: fonts/Orbitron-Regular.ttf
+
+   - family: NotoMusic
+     fonts:
+       - asset: fonts/NotoMusic-Regular.ttf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
