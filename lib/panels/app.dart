@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_fft/flutter_fft.dart';
 import 'package:fretapp/utility/NoteValidator.dart';
 import 'package:fretapp/utility/Note.dart';
+import 'package:fretapp/widgets/AnimCircle.dart';
 
 class App extends StatefulWidget {
   @override
@@ -12,6 +13,8 @@ class App extends StatefulWidget {
 }
 
 class AppState extends State<App> {
+  final CircleController myController = CircleController();
+
   List<Note>? notesList;
   List<double>? notesFreq;
   NoteValidator? noteValidator;
@@ -22,6 +25,7 @@ class AppState extends State<App> {
   bool? isRecording;
   bool? started;
 
+  Note? currentNote;
   Note? targetNote;
   bool? isOnNote;
   int? timeOnNote;
@@ -51,30 +55,38 @@ class AppState extends State<App> {
               frequency = data[1] as double,
               note = data[2] as String,
               octave = data[5] as int,
-              isOnNote = targetNote == noteValidator?.findClosestNote(frequency!),
+              currentNote = noteValidator?.findClosestNote(frequency!),
+              myController.setNote(currentNote!),
+              isOnNote = targetNote == currentNote,
             },
+
             ),
             if(isOnNote!){
-              Timer(Duration(milliseconds: 500), () => {
                 setState(() => {
                   timeOnNote = (timeOnNote! + 1),
                 })
-              })
             },
 
-            // if(!isOnNote!){ // odkomentowac po dodaniu losowania dwieku
-            //   Timer(Duration(milliseconds: 500), () => {
-            //     setState(() => {
-            //       timeOnNote = (timeOnNote! + 1),
-            //     })
-            //   })
-            // },
+            if(!isOnNote!){ // odkomentowac po dodaniu losowania dwieku
+                setState(() => {
+                  timeOnNote = 0,
+                }),
+              myController.reset(),
+            },
 
-            if(timeOnNote! >= 6){
+            if(timeOnNote! >= 10){
               setState(() => {
                 targetNote = noteValidator!.getTarget(targetNote!),
                 timeOnNote = 0
               })
+            },
+
+            if(timeOnNote == 2){
+              myController.resize(20.0,  Color(0xFF41FF00).withOpacity(0.4)),
+            }else if(timeOnNote == 4){
+              myController.resize(40.0,  Color(0xFF00D100).withOpacity(0.4)),
+            }else if(timeOnNote == 7){
+              myController.resize(60.0,  Color(0xFF018701).withOpacity(0.4)),
             },
 
             flutterFft.setNote = note!,
@@ -97,6 +109,7 @@ class AppState extends State<App> {
     noteValidator = NoteValidator(notes);
 
     targetNote = noteValidator!.getTarget(Note.NULL);
+    currentNote = Note.NULL;
     isOnNote = false;
     timeOnNote = 0;
 
@@ -124,7 +137,7 @@ class AppState extends State<App> {
                   children: [
                     SizedBox(height: 100),
                   started!
-                      ? Text(
+                      ? const Text(
                       "TARGET",
                       style: TextStyle(fontSize: 25, letterSpacing: 5))
                       : SizedBox(width: 0, height: 0,),
@@ -140,7 +153,7 @@ class AppState extends State<App> {
                     SizedBox(height: 10),
 
                     started!
-                        ? Text(
+                        ? const Text(
                         "YOUR NOTE",
                         style: TextStyle(fontSize: 15, letterSpacing: 5))
                         : SizedBox(width: 0, height: 0,),
@@ -148,27 +161,38 @@ class AppState extends State<App> {
                     SizedBox(height: 10),
 
                     started!
-                        ? Text(
-                        '${noteValidator?.findClosestNote(frequency!)}',
-                        style: TextStyle(fontSize: 40))
+                        ? SizedBox(
+                          height: 60,
+                          child: Text(
+                          '${noteValidator?.findClosestNote(frequency!)}',
+                          style: TextStyle(fontSize: 40)),
+                        )
                         : SizedBox(width: 0, height: 0,),
+
+                    started!
+                        ? SizedBox(
+                      width: 300,
+                      height: 100,
+                      child: Center(
+                        child: AnimCircle(
+                          circleController: myController,
+                        ),
+                      ),
+                    )
+                        : SizedBox(width: 0, height: 0,),
+
+
+                    started!
+                        ? Text("${frequency!.toStringAsFixed(2)}",
+                        style: TextStyle(fontSize: 20))
+                        : SizedBox(width: 0, height: 0,),
+
 
                     started!
                         ? Text(
                         '${isOnNote} ${timeOnNote}',
                         style: TextStyle(fontSize: 40))
                         : SizedBox(width: 0, height: 0,),
-
-                    started!
-                      ? Text("Current note: ${note!},${octave!.toString()}",
-                      style: TextStyle(fontSize: 30))
-                      : Text("Not Recording", style: TextStyle(fontSize: 35)),
-
-                  started!
-                      ? Text(
-                      "Current frequency: ${frequency!.toStringAsFixed(2)}",
-                      style: TextStyle(fontSize: 30))
-                      : SizedBox(width: 0, height: 0,),
 
                   ],),
               ),
