@@ -45,8 +45,20 @@ class Note {
   static const OCTAVE3 = [C3, CsDb3, D3, DsEb3, E3, F3, FsGb3, G3, GsAb3, A3, AsBb3, B3];
   static const OCTAVE4 = [C4, CsDb4, D4, DsEb4, E4, F4, FsGb4, G4, GsAb4, A4, AsBb4, B4];
   static const OCTAVE5 = [C5, CsDb5, D5, DsEb5, E5];
-
   static const OCTAVE6 = [C6, CsDb6, D6, DsEb6, E6, F6, FsGb6, G6, GsAb6, A6, AsBb6, B6];
+
+  static const FRET1 = [F2, AsBb2, DsEb3, GsAb3, C4, F4];
+  static const FRET2 = [FsGb2, B2, E3, A3, CsDb4, FsGb4];
+  static const FRET3 = [G2, C3, F3, AsBb3, D4, G4];
+  static const FRET4 = [GsAb2, CsDb3, FsGb3, B3, DsEb4, GsAb4];
+  static const FRET5 = [A2, D3, G3, C4, E4, A4];
+  static const FRET6 = [AsBb2, DsEb3, GsAb3, CsDb4, F4, AsBb4];
+  static const FRET7 = [B2, E3, A3, D4, FsGb4, B4];
+  static const FRET8 = [C3, F3, AsBb3, DsEb4, G4, C5];
+  static const FRET9 = [CsDb3, FsGb3, B3, E4, GsAb4, CsDb5];
+  static const FRET10 = [D3, G3, C4, F4, A4, D5];
+  static const FRET11 = [DsEb3, GsAb3, CsDb4, FsGb4, AsBb4, DsEb5];
+  static const FRET12 = [E3, A3, D4, G4, B4, E5];
 
   static const NULL = Note._internal('-', 0);
 

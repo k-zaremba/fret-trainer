@@ -67,26 +67,30 @@ class AppState extends State<App> {
                 })
             },
 
-            if(!isOnNote!){ // odkomentowac po dodaniu losowania dwieku
-                setState(() => {
-                  timeOnNote = 0,
-                }),
-              myController.reset(),
-            },
-
             if(timeOnNote! >= 10){
               setState(() => {
                 targetNote = noteValidator!.getTarget(targetNote!),
-                timeOnNote = 0
+                isOnNote = false,
+                timeOnNote = 0,
               })
             },
 
-            if(timeOnNote == 2){
-              myController.resize(20.0,  Color(0xFF41FF00).withOpacity(0.4)),
-            }else if(timeOnNote == 4){
-              myController.resize(40.0,  Color(0xFF00D100).withOpacity(0.4)),
-            }else if(timeOnNote == 7){
-              myController.resize(60.0,  Color(0xFF018701).withOpacity(0.4)),
+            if(!isOnNote!){
+              if(timeOnNote! > 0){
+                setState(() => {
+                  timeOnNote = (timeOnNote! - 1),
+                }),
+              },
+              if(timeOnNote == 0)
+                myController.reset(),
+            },
+
+            if(timeOnNote==1){
+              myController.resize(40.0, Color(0xFF30BD00).withOpacity(0.8)),
+            }else if(timeOnNote==4){
+              myController.resize(70.0, Color(0xFF30BD00).withOpacity(0.6)),
+            }else if(timeOnNote==7){
+              myController.resize(100.0, Color(0xFF30BD00).withOpacity(0.4)),
             },
 
             flutterFft.setNote = note!,
@@ -105,7 +109,9 @@ class AppState extends State<App> {
 
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
 
-    List<Note> notes = Note.getNotesList([Note.OCTAVE2, Note.OCTAVE3, Note.OCTAVE4, Note.OCTAVE5]); // build game domain
+    //List<Note> notes = Note.getNotesList([Note.OCTAVE2, Note.OCTAVE3, Note.OCTAVE4, Note.OCTAVE5]); // build game domain
+    List<Note> notes = Note.getNotesList([[Note.D3, Note.DsEb3]]); // build game domain
+
     noteValidator = NoteValidator(notes);
 
     targetNote = noteValidator!.getTarget(Note.NULL);
@@ -137,42 +143,39 @@ class AppState extends State<App> {
                   children: [
                     SizedBox(height: 100),
                   started!
-                      ? const Text(
-                      "TARGET",
-                      style: TextStyle(fontSize: 25, letterSpacing: 5))
+                      ? SizedBox(
+                        height: 40,
+                        child: const Text(
+                        "TARGET",
+                        style: TextStyle(fontSize: 25, letterSpacing: 5)),
+                      )
                       : SizedBox(width: 0, height: 0,),
 
                     SizedBox(height: 10),
 
                     started!
-                        ? Text(
-                        '${targetNote}',
-                        style: TextStyle(fontSize: 60))
+                        ? SizedBox(
+                          height: 80,
+                          child: Text(
+                          '${targetNote}',
+                          style: TextStyle(fontSize: 60)),
+                        )
                         : SizedBox(width: 0, height: 0,),
 
-                    SizedBox(height: 10),
+                    SizedBox(height: 40),
 
                     started!
                         ? const Text(
                         "YOUR NOTE",
-                        style: TextStyle(fontSize: 15, letterSpacing: 5))
+                        style: TextStyle(fontSize: 18, letterSpacing: 5))
                         : SizedBox(width: 0, height: 0,),
 
                     SizedBox(height: 10),
 
                     started!
                         ? SizedBox(
-                          height: 60,
-                          child: Text(
-                          '${noteValidator?.findClosestNote(frequency!)}',
-                          style: TextStyle(fontSize: 40)),
-                        )
-                        : SizedBox(width: 0, height: 0,),
-
-                    started!
-                        ? SizedBox(
                       width: 300,
-                      height: 100,
+                      height: 70,
                       child: Center(
                         child: AnimCircle(
                           circleController: myController,
@@ -181,22 +184,16 @@ class AppState extends State<App> {
                     )
                         : SizedBox(width: 0, height: 0,),
 
+                    SizedBox(height: 10),
 
                     started!
                         ? Text("${frequency!.toStringAsFixed(2)}",
-                        style: TextStyle(fontSize: 20))
-                        : SizedBox(width: 0, height: 0,),
-
-
-                    started!
-                        ? Text(
-                        '${isOnNote} ${timeOnNote}',
-                        style: TextStyle(fontSize: 40))
+                        style: TextStyle(fontSize: 18, letterSpacing: 3))
                         : SizedBox(width: 0, height: 0,),
 
                   ],),
               ),
-                TextButton(
+                RawMaterialButton(
                     onPressed: () {
                       _initialize();
                       setState(() {
@@ -205,7 +202,7 @@ class AppState extends State<App> {
                     },
                     child: Text('START',
                         style: TextStyle(
-                            color: Colors.pink,
+                            color: Colors.indigo,
                             fontSize: 40 )
                     )
                 ),
