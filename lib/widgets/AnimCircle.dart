@@ -11,7 +11,7 @@ class CircleController {
 
 class AnimCircle extends StatefulWidget {
   final CircleController circleController;
-  static const milis = 100;
+  static const milis = 375;
 
   AnimCircle({required this.circleController});
 
@@ -33,7 +33,7 @@ class _AnimCircleState extends State<AnimCircle> {
   double _height = 10;
   Note currentNote = Note.NULL;
 
-  Color _color = Colors.white.withOpacity(0);
+  Color _color = Colors.red.withOpacity(0);
 
   void resize(px, color){
     print('change');
@@ -56,7 +56,6 @@ class _AnimCircleState extends State<AnimCircle> {
   }
 
   void reset(){
-    print('reset');
     setState(() {
       _width = 10;
       _height = 10;
@@ -64,7 +63,7 @@ class _AnimCircleState extends State<AnimCircle> {
 
     if(active) {
       setState(() {
-        _color = Colors.white.withOpacity(0);
+        _color = Colors.red.withOpacity(0);
         active = false;
       });
     }
@@ -81,7 +80,7 @@ class _AnimCircleState extends State<AnimCircle> {
     return Stack(
       children: [Center(
         child: AnimatedContainer(
-          curve: Curves.elasticInOut,
+          curve: Curves.easeOutQuart,
           duration: const Duration(milliseconds:AnimCircle.milis),
           width: _width,
           height: _height,
