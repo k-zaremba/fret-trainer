@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:fretapp/panels/app.dart';
-import 'package:fretapp/widgets/Home.dart';
-import 'package:fretapp/widgets/Test.dart';
+import 'package:fretapp/widgets/MainView.dart';
 
 void main() => runApp(MaterialApp(
-  initialRoute: '/home',
+  initialRoute: '/',
   routes: {
-    '/home': (context) => Home(),
-    '/app': (context) => App(),
-    '/test': (context) => Test()
+    '/' : (context) => MainView(),
   },
 ));
