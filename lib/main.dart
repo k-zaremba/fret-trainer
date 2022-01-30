@@ -4,6 +4,6 @@ import 'package:fretapp/widgets/MainView.dart';
 void main() => runApp(MaterialApp(
   initialRoute: '/',
   routes: {
-    '/' : (context) => MainView(),
+    '/' : (context) => const MainView(),
   },
 ));

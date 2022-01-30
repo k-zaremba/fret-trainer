@@ -11,16 +11,13 @@ class Home extends StatefulWidget {
   Home({required this.parentScreenFunction, required this.parentNoteFunction});
 
   @override
-  HomeState createState() => HomeState(parentScreenFunction, parentNoteFunction);
+  HomeState createState() => HomeState();
 }
 
 class HomeState extends State<Home> {
 
-  HomeState(Function() screenFun, Function(List<Note>) noteFun) : parentScreenFunction = screenFun, parentNoteFunction = noteFun;
-
-  Function() parentScreenFunction;
-  Function(List<Note>) parentNoteFunction;
-
+  late Function() parentScreenFunction;
+  late Function(List<Note>) parentNoteFunction;
 
   bool? started;
   List<Note> o2 = Note.OCTAVE2;
@@ -51,6 +48,8 @@ class HomeState extends State<Home> {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
 
     setState(() {
+      parentNoteFunction = widget.parentNoteFunction;
+      parentScreenFunction = widget.parentScreenFunction;
       o2select = List.generate(o2.length, (index) => true);
       o3select = List.generate(o3.length, (index) => true);
       o4select = List.generate(o4.length, (index) => true);
@@ -161,481 +160,472 @@ class HomeState extends State<Home> {
         color: Colors.blue,
         home: Scaffold(
           backgroundColor: Colors.white12,
-          body: Center(
-            child: Column(
-              children: [SingleChildScrollView(
-                child: SizedBox(
-                  child: Column(
-                    children: [
+          body: Column(
+            children: [
 
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            CustomToggleButtons(
-                            children: const [
-                              SizedBox(width: 173,child : Text('NOTES', style: TextStyle(letterSpacing: 3, fontWeight: FontWeight.w600, fontSize: 27), textAlign: TextAlign.center,)),
-                              SizedBox(width: 171,child : Text('FRETS', style: TextStyle(letterSpacing: 3, fontWeight: FontWeight.w600, fontSize: 27), textAlign: TextAlign.center,)),
-                            ],
+              Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                CustomToggleButtons(
+                children: const [
+                  SizedBox(width: 173,child : Text('NOTES', style: TextStyle(letterSpacing: 3, fontWeight: FontWeight.w600, fontSize: 27), textAlign: TextAlign.center,)),
+                  SizedBox(width: 171,child : Text('FRETS', style: TextStyle(letterSpacing: 3, fontWeight: FontWeight.w600, fontSize: 27), textAlign: TextAlign.center,)),
+                ],
 
-                            isSelected: tabSelect,
-                            onPressed: (int index){
-                              toggleScreen(index);
-                            },
-                            color: Colors.white38,
-                            selectedColor: Colors.white,
-                            fillColor: Colors.indigo,
-                            renderBorder: false,
-                            splashColor: Colors.white,
-                      ),
-                          ],
-                        ),
-
-                      const SizedBox(height: 10),
-
-                      SizedBox(
-                        height: 620,
-                        child:
-                        tabSelect[0] ?
-
-                        Column(
-                          children: [
-                            CustomToggleButtons(
-                                children: const [
-                                  SizedBox(width: 70, child: Text('OCTAVE 2', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600, fontSize: 12),)),
-                                  SizedBox(width: 70, child: Text('OCTAVE 3', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600, fontSize: 12),)),
-                                  SizedBox(width: 70, child: Text('OCTAVE 4', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600, fontSize: 12),)),
-                                  SizedBox(width: 70, child: Text('OCTAVE 5', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600, fontSize: 12),)),
-                                ],
-                                isSelected: octavesSelect,
-                                onPressed: (int index){
-                                  setState(() {
-                                    octavesSelect[index] = !octavesSelect[index];
-                                  });
-                                },
-                              color: Colors.white38,
-                              selectedColor: Colors.white,
-                              fillColor: Colors.indigo,
-                              renderBorder: false,
-                              splashColor: Colors.white,
-                              spacing: 4,
-                            ),
-                            const SizedBox(height: 3,),
-
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-
-                                octavesSelect[0] ?
-                                CustomToggleButtons(
-                                  direction : Axis.vertical,
-                                  children:  notesToButtons(o2), // tutaj daje oktawe
-                                  isSelected: o2select,
-                                  color: Colors.white38,
-                                  selectedColor: Colors.white,
-                                  fillColor: Colors.indigo,
-                                  renderBorder: false,
-                                  splashColor: Colors.white,
-                                  spacing: 5.0,
-                                  constraints: const BoxConstraints(minWidth: 40.0, minHeight: 42.0),
-                                  disabledFillColor: Colors.black26,
-                                )
-
-                                    :
-
-                                CustomToggleButtons(
-                                  direction : Axis.vertical,
-                                  children:  notesToButtons(o2), // tutaj daje oktawe
-                                  isSelected: o2select,
-                                  onPressed: (int index){
-                                    setState(() {
-                                      o2select[index] = !o2select[index];
-                                    });
-                                  },
-                                  color: Colors.white38,
-                                  selectedColor: Colors.white,
-                                  fillColor: Colors.indigo,
-                                  renderBorder: false,
-                                  splashColor: Colors.white,
-                                  spacing: 5.0,
-                                  constraints: const BoxConstraints(minWidth: 40.0, minHeight: 42.0),
-
-                                ),
-
-                                octavesSelect[1] ?
-                                CustomToggleButtons(
-                                  direction : Axis.vertical,
-                                  children:  notesToButtons(o3), // tutaj daje oktawe
-                                  isSelected: o3select,
-                                  color: Colors.white38,
-                                  selectedColor: Colors.white,
-                                  fillColor: Colors.indigo,
-                                  renderBorder: false,
-                                  splashColor: Colors.white,
-                                  spacing: 5.0,
-                                  constraints: const BoxConstraints(minWidth: 40.0, minHeight: 42.0),
-                                  disabledFillColor: Colors.black26,
-                                )
-
-                                    :
-
-                                CustomToggleButtons(
-                                  direction : Axis.vertical,
-                                  children:  notesToButtons(o3), // tutaj daje oktawe
-                                  isSelected: o3select,
-                                  onPressed: (int index){
-                                    setState(() {
-                                      o3select[index] = !o3select[index];
-                                    });
-                                  },
-                                  color: Colors.white38,
-                                  selectedColor: Colors.white,
-                                  fillColor: Colors.indigo,
-                                  renderBorder: false,
-                                  splashColor: Colors.white,
-                                  spacing: 5.0,
-                                  constraints: const BoxConstraints(minWidth: 40.0, minHeight: 42.0),
-
-                                ),
-
-                                octavesSelect[2] ?
-                                CustomToggleButtons(
-                                  direction : Axis.vertical,
-                                  children:  notesToButtons(o4), // tutaj daje oktawe
-                                  isSelected: o4select,
-                                  color: Colors.white38,
-                                  selectedColor: Colors.white,
-                                  fillColor: Colors.indigo,
-                                  renderBorder: false,
-                                  splashColor: Colors.white,
-                                  spacing: 5.0,
-                                  constraints: const BoxConstraints(minWidth: 40.0, minHeight: 42.0),
-                                  disabledFillColor: Colors.black26,
-                                )
-
-                                    :
-
-                                CustomToggleButtons(
-                                  direction : Axis.vertical,
-                                  children:  notesToButtons(o4), // tutaj daje oktawe
-                                  isSelected: o4select,
-                                  onPressed: (int index){
-                                    setState(() {
-                                      o4select[index] = !o4select[index];
-                                    });
-                                  },
-                                  color: Colors.white38,
-                                  selectedColor: Colors.white,
-                                  fillColor: Colors.indigo,
-                                  renderBorder: false,
-                                  splashColor: Colors.white,
-                                  spacing: 5.0,
-                                  constraints: const BoxConstraints(minWidth: 40.0, minHeight: 42.0),
-
-                                ),
-
-                                octavesSelect[3] ?
-                                CustomToggleButtons(
-                                  direction : Axis.vertical,
-                                  children:  notesToButtons(o5), // tutaj daje oktawe
-                                  isSelected: o5select,
-                                  color: Colors.white38,
-                                  selectedColor: Colors.white,
-                                  fillColor: Colors.indigo,
-                                  renderBorder: false,
-                                  splashColor: Colors.white,
-                                  spacing: 5.0,
-                                  constraints: const BoxConstraints(minWidth: 40.0, minHeight: 42.0),
-                                  disabledFillColor: Colors.black26,
-                                )
-
-                                    :
-                                CustomToggleButtons(
-                                  direction : Axis.vertical,
-                                  children:  notesToButtons(o5), // tutaj daje oktawe
-                                  isSelected: o5select,
-                                  onPressed: (int index){
-                                    setState(() {
-                                      o5select[index] = !o5select[index];
-                                    });
-                                  },
-                                  color: Colors.white38,
-                                  selectedColor: Colors.white,
-                                  fillColor: Colors.indigo,
-                                  renderBorder: false,
-                                  splashColor: Colors.white,
-                                  spacing: 5.0,
-                                  constraints: const BoxConstraints(minWidth: 40.0, minHeight: 42.0),
-                                ),
-
-
-                              ],
-                            ),],
-                        )
-              :
-                        Column(
-                          children: [ //TODO: FRETS
-                            CustomToggleButtons(
-                              children: const [
-                                SizedBox(width: 70, child: Text('1 - 3', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600, fontSize: 17),textAlign: TextAlign.center,)),
-                                SizedBox(width: 70, child: Text('4 - 6', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600, fontSize: 17),textAlign: TextAlign.center,)),
-                                SizedBox(width: 70, child: Text('7 - 9', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600, fontSize: 17),textAlign: TextAlign.center,)),
-                                SizedBox(width: 70, child: Text('10 - 12', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600, fontSize: 17),textAlign: TextAlign.center,)),
-                              ],
-                              isSelected: fretsSelect,
-                              onPressed: (int index){
-                                setState(() {
-                                  fretsSelect[index] = !fretsSelect[index];
-                                });
-                              },
-                              color: Colors.white38,
-                              selectedColor: Colors.white,
-                              fillColor: Colors.indigo,
-                              renderBorder: false,
-                              splashColor: Colors.white,
-                              spacing: 4,
-                            ),
-                            const SizedBox(height: 3,),
-
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-
-                                fretsSelect[0] ?
-                                CustomToggleButtons(
-                                  direction : Axis.vertical,
-                                  children: const [
-                                    SizedBox(width: 70, child: Text('FRET 1', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
-                                    SizedBox(width: 70, child: Text('FRET 2', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
-                                    SizedBox(width: 70, child: Text('FRET 3', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
-                                  ],
-                                  isSelected: frets1_3select,
-                                  color: Colors.white38,
-                                  selectedColor: Colors.white,
-                                  fillColor: Colors.indigo,
-                                  renderBorder: false,
-                                  splashColor: Colors.white,
-                                  spacing: 5.0,
-                                  constraints: const BoxConstraints(minWidth: 40.0, minHeight: 42.0),
-                                  disabledFillColor: Colors.black26,
-                                )
-
-                                    :
-
-                                CustomToggleButtons(
-                                  direction : Axis.vertical,
-                                  children: const [
-                                    SizedBox(width: 70, child: Text('FRET 1', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
-                                    SizedBox(width: 70, child: Text('FRET 2', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
-                                    SizedBox(width: 70, child: Text('FRET 3', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
-                                  ],
-                                  isSelected: frets1_3select,
-                                  onPressed: (int index){
-                                    setState(() {
-                                      frets1_3select[index] = !frets1_3select[index];
-                                    });
-                                  },
-                                  color: Colors.white38,
-                                  selectedColor: Colors.white,
-                                  fillColor: Colors.indigo,
-                                  renderBorder: false,
-                                  splashColor: Colors.white,
-                                  spacing: 5.0,
-                                  constraints: const BoxConstraints(minWidth: 40.0, minHeight: 42.0),
-                                ),
-
-                                fretsSelect[1] ?
-                                CustomToggleButtons(
-                                  direction : Axis.vertical,
-                                  children: const [
-                                    SizedBox(width: 70, child: Text('FRET 4', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
-                                    SizedBox(width: 70, child: Text('FRET 5', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
-                                    SizedBox(width: 70, child: Text('FRET 6', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
-                                  ],
-                                  isSelected: frets4_6select,
-                                  color: Colors.white38,
-                                  selectedColor: Colors.white,
-                                  fillColor: Colors.indigo,
-                                  renderBorder: false,
-                                  splashColor: Colors.white,
-                                  spacing: 5.0,
-                                  constraints: const BoxConstraints(minWidth: 40.0, minHeight: 42.0),
-                                  disabledFillColor: Colors.black26,
-                                )
-
-                                    :
-
-                                CustomToggleButtons(
-                                  direction : Axis.vertical,
-                                  children: const [
-                                    SizedBox(width: 70, child: Text('FRET 4', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
-                                    SizedBox(width: 70, child: Text('FRET 5', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
-                                    SizedBox(width: 70, child: Text('FRET 6', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
-                                  ],
-                                  isSelected: frets4_6select,
-                                  onPressed: (int index){
-                                    setState(() {
-                                      frets4_6select[index] = !frets4_6select[index];
-                                    });
-                                  },
-                                  color: Colors.white38,
-                                  selectedColor: Colors.white,
-                                  fillColor: Colors.indigo,
-                                  renderBorder: false,
-                                  splashColor: Colors.white,
-                                  spacing: 5.0,
-                                  constraints: const BoxConstraints(minWidth: 40.0, minHeight: 42.0),
-                                ),
-
-                                fretsSelect[2] ?
-                                CustomToggleButtons(
-                                  direction : Axis.vertical,
-                                  children: const [
-                                    SizedBox(width: 70, child: Text('FRET 7', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
-                                    SizedBox(width: 70, child: Text('FRET 8', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
-                                    SizedBox(width: 70, child: Text('FRET 9', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
-                                  ],
-                                  isSelected: frets7_9select,
-                                  color: Colors.white38,
-                                  selectedColor: Colors.white,
-                                  fillColor: Colors.indigo,
-                                  renderBorder: false,
-                                  splashColor: Colors.white,
-                                  spacing: 5.0,
-                                  constraints: const BoxConstraints(minWidth: 40.0, minHeight: 42.0),
-                                  disabledFillColor: Colors.black26,
-                                )
-
-                                    :
-
-                                CustomToggleButtons(
-                                  direction : Axis.vertical,
-                                  children: const [
-                                    SizedBox(width: 70, child: Text('FRET 7', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
-                                    SizedBox(width: 70, child: Text('FRET 8', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
-                                    SizedBox(width: 70, child: Text('FRET 9', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
-                                  ],
-                                  isSelected: frets7_9select,
-                                  onPressed: (int index){
-                                    setState(() {
-                                      frets7_9select[index] = !frets7_9select[index];
-                                    });
-                                  },
-                                  color: Colors.white38,
-                                  selectedColor: Colors.white,
-                                  fillColor: Colors.indigo,
-                                  renderBorder: false,
-                                  splashColor: Colors.white,
-                                  spacing: 5.0,
-                                  constraints: const BoxConstraints(minWidth: 40.0, minHeight: 42.0),
-                                ),
-
-
-                                fretsSelect[3] ?
-                                CustomToggleButtons(
-                                  direction : Axis.vertical,
-                                  children: const [
-                                    SizedBox(width: 70, child: Text('FRET 10', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
-                                    SizedBox(width: 70, child: Text('FRET 11', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
-                                    SizedBox(width: 70, child: Text('FRET 12', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
-                                  ],
-                                  isSelected: frets10_12select,
-                                  color: Colors.white38,
-                                  selectedColor: Colors.white,
-                                  fillColor: Colors.indigo,
-                                  renderBorder: false,
-                                  splashColor: Colors.white,
-                                  spacing: 5.0,
-                                  constraints: const BoxConstraints(minWidth: 40.0, minHeight: 42.0),
-                                  disabledFillColor: Colors.black26,
-                                )
-
-                                    :
-
-                                CustomToggleButtons(
-                                  direction : Axis.vertical,
-                                  children: const [
-                                    SizedBox(width: 70, child: Text('FRET 10', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
-                                    SizedBox(width: 70, child: Text('FRET 11', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
-                                    SizedBox(width: 70, child: Text('FRET 12', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
-                                  ],
-                                  isSelected: frets10_12select,
-                                  onPressed: (int index){
-                                    setState(() {
-                                      frets10_12select[index] = !frets10_12select[index];
-                                    });
-                                  },
-                                  color: Colors.white38,
-                                  selectedColor: Colors.white,
-                                  fillColor: Colors.indigo,
-                                  renderBorder: false,
-                                  splashColor: Colors.white,
-                                  spacing: 5.0,
-                                  constraints: const BoxConstraints(minWidth: 40.0, minHeight: 42.0),
-                                ),
-
-                              ],
-                            ),],
-                        )
-
-
-                      ),
-                      const SizedBox(height: 30,),
-
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                primary: Colors.deepPurple,
-                                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                                textStyle: const TextStyle(
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.bold)),
-                            onPressed: () {
-                              setAll(true);
-                            },
-                            child: const Text('ALL'),
-                          ),
-
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                primary: Colors.deepPurple,
-                                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                                textStyle: const TextStyle(
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.bold)),
-                            onPressed: () {
-                              setAll(false);
-                            },
-                            child: const Text('NONE'),
-                          ),
-
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                primary: Colors.deepPurple,
-                                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                                textStyle: const TextStyle(
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.bold)),
-                            onPressed: () {
-                              proceed();
-                              parentScreenFunction();
-
-                              // Respond to button press
-                            },
-                            child: const Text('START'),
-                          ),
-                        ],
-                      )
-
-                    ],),
+                isSelected: tabSelect,
+                onPressed: (int index){
+                  toggleScreen(index);
+                },
+                color: Colors.white38,
+                selectedColor: Colors.white,
+                fillColor: Colors.indigo,
+                renderBorder: false,
+                splashColor: Colors.white,
                 ),
-              ),
+              ],
+            ),
 
-              ],),
-          ),
+                const SizedBox(height: 10),
+
+                SizedBox(
+            height: 620,
+            child:
+            tabSelect[0] ?
+
+            Column(
+              children: [
+                CustomToggleButtons(
+                    children: const [
+                      SizedBox(width: 70, child: Text('OCTAVE 2', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600, fontSize: 12),)),
+                      SizedBox(width: 70, child: Text('OCTAVE 3', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600, fontSize: 12),)),
+                      SizedBox(width: 70, child: Text('OCTAVE 4', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600, fontSize: 12),)),
+                      SizedBox(width: 70, child: Text('OCTAVE 5', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600, fontSize: 12),)),
+                    ],
+                    isSelected: octavesSelect,
+                    onPressed: (int index){
+                      setState(() {
+                        octavesSelect[index] = !octavesSelect[index];
+                      });
+                    },
+                  color: Colors.white38,
+                  selectedColor: Colors.white,
+                  fillColor: Colors.indigo,
+                  renderBorder: false,
+                  splashColor: Colors.white,
+                  spacing: 4,
+                ),
+                const SizedBox(height: 3,),
+
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+
+                    octavesSelect[0] ?
+                    CustomToggleButtons(
+                      direction : Axis.vertical,
+                      children:  notesToButtons(o2), // tutaj daje oktawe
+                      isSelected: o2select,
+                      color: Colors.white38,
+                      selectedColor: Colors.white,
+                      fillColor: Colors.indigo,
+                      renderBorder: false,
+                      splashColor: Colors.white,
+                      spacing: 5.0,
+                      constraints: const BoxConstraints(minWidth: 40.0, minHeight: 42.0),
+                      disabledFillColor: Colors.black26,
+                    )
+
+                        :
+
+                    CustomToggleButtons(
+                      direction : Axis.vertical,
+                      children:  notesToButtons(o2), // tutaj daje oktawe
+                      isSelected: o2select,
+                      onPressed: (int index){
+                        setState(() {
+                          o2select[index] = !o2select[index];
+                        });
+                      },
+                      color: Colors.white38,
+                      selectedColor: Colors.white,
+                      fillColor: Colors.indigo,
+                      renderBorder: false,
+                      splashColor: Colors.white,
+                      spacing: 5.0,
+                      constraints: const BoxConstraints(minWidth: 40.0, minHeight: 42.0),
+
+                    ),
+
+                    octavesSelect[1] ?
+                    CustomToggleButtons(
+                      direction : Axis.vertical,
+                      children:  notesToButtons(o3), // tutaj daje oktawe
+                      isSelected: o3select,
+                      color: Colors.white38,
+                      selectedColor: Colors.white,
+                      fillColor: Colors.indigo,
+                      renderBorder: false,
+                      splashColor: Colors.white,
+                      spacing: 5.0,
+                      constraints: const BoxConstraints(minWidth: 40.0, minHeight: 42.0),
+                      disabledFillColor: Colors.black26,
+                    )
+
+                        :
+
+                    CustomToggleButtons(
+                      direction : Axis.vertical,
+                      children:  notesToButtons(o3), // tutaj daje oktawe
+                      isSelected: o3select,
+                      onPressed: (int index){
+                        setState(() {
+                          o3select[index] = !o3select[index];
+                        });
+                      },
+                      color: Colors.white38,
+                      selectedColor: Colors.white,
+                      fillColor: Colors.indigo,
+                      renderBorder: false,
+                      splashColor: Colors.white,
+                      spacing: 5.0,
+                      constraints: const BoxConstraints(minWidth: 40.0, minHeight: 42.0),
+
+                    ),
+
+                    octavesSelect[2] ?
+                    CustomToggleButtons(
+                      direction : Axis.vertical,
+                      children:  notesToButtons(o4), // tutaj daje oktawe
+                      isSelected: o4select,
+                      color: Colors.white38,
+                      selectedColor: Colors.white,
+                      fillColor: Colors.indigo,
+                      renderBorder: false,
+                      splashColor: Colors.white,
+                      spacing: 5.0,
+                      constraints: const BoxConstraints(minWidth: 40.0, minHeight: 42.0),
+                      disabledFillColor: Colors.black26,
+                    )
+
+                        :
+
+                    CustomToggleButtons(
+                      direction : Axis.vertical,
+                      children:  notesToButtons(o4), // tutaj daje oktawe
+                      isSelected: o4select,
+                      onPressed: (int index){
+                        setState(() {
+                          o4select[index] = !o4select[index];
+                        });
+                      },
+                      color: Colors.white38,
+                      selectedColor: Colors.white,
+                      fillColor: Colors.indigo,
+                      renderBorder: false,
+                      splashColor: Colors.white,
+                      spacing: 5.0,
+                      constraints: const BoxConstraints(minWidth: 40.0, minHeight: 42.0),
+
+                    ),
+
+                    octavesSelect[3] ?
+                    CustomToggleButtons(
+                      direction : Axis.vertical,
+                      children:  notesToButtons(o5), // tutaj daje oktawe
+                      isSelected: o5select,
+                      color: Colors.white38,
+                      selectedColor: Colors.white,
+                      fillColor: Colors.indigo,
+                      renderBorder: false,
+                      splashColor: Colors.white,
+                      spacing: 5.0,
+                      constraints: const BoxConstraints(minWidth: 40.0, minHeight: 42.0),
+                      disabledFillColor: Colors.black26,
+                    )
+
+                        :
+                    CustomToggleButtons(
+                      direction : Axis.vertical,
+                      children:  notesToButtons(o5), // tutaj daje oktawe
+                      isSelected: o5select,
+                      onPressed: (int index){
+                        setState(() {
+                          o5select[index] = !o5select[index];
+                        });
+                      },
+                      color: Colors.white38,
+                      selectedColor: Colors.white,
+                      fillColor: Colors.indigo,
+                      renderBorder: false,
+                      splashColor: Colors.white,
+                      spacing: 5.0,
+                      constraints: const BoxConstraints(minWidth: 40.0, minHeight: 42.0),
+                    ),
+
+
+                  ],
+                ),],
+            )
+            :
+            Column(
+              children: [ //TODO: FRETS
+                CustomToggleButtons(
+                  children: const [
+                    SizedBox(width: 70, child: Text('1 - 3', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600, fontSize: 17),textAlign: TextAlign.center,)),
+                    SizedBox(width: 70, child: Text('4 - 6', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600, fontSize: 17),textAlign: TextAlign.center,)),
+                    SizedBox(width: 70, child: Text('7 - 9', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600, fontSize: 17),textAlign: TextAlign.center,)),
+                    SizedBox(width: 70, child: Text('10 - 12', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600, fontSize: 17),textAlign: TextAlign.center,)),
+                  ],
+                  isSelected: fretsSelect,
+                  onPressed: (int index){
+                    setState(() {
+                      fretsSelect[index] = !fretsSelect[index];
+                    });
+                  },
+                  color: Colors.white38,
+                  selectedColor: Colors.white,
+                  fillColor: Colors.indigo,
+                  renderBorder: false,
+                  splashColor: Colors.white,
+                  spacing: 4,
+                ),
+                const SizedBox(height: 3,),
+
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+
+                    fretsSelect[0] ?
+                    CustomToggleButtons(
+                      direction : Axis.vertical,
+                      children: const [
+                        SizedBox(width: 70, child: Text('FRET 1', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
+                        SizedBox(width: 70, child: Text('FRET 2', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
+                        SizedBox(width: 70, child: Text('FRET 3', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
+                      ],
+                      isSelected: frets1_3select,
+                      color: Colors.white38,
+                      selectedColor: Colors.white,
+                      fillColor: Colors.indigo,
+                      renderBorder: false,
+                      splashColor: Colors.white,
+                      spacing: 5.0,
+                      constraints: const BoxConstraints(minWidth: 40.0, minHeight: 42.0),
+                      disabledFillColor: Colors.black26,
+                    )
+
+                        :
+
+                    CustomToggleButtons(
+                      direction : Axis.vertical,
+                      children: const [
+                        SizedBox(width: 70, child: Text('FRET 1', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
+                        SizedBox(width: 70, child: Text('FRET 2', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
+                        SizedBox(width: 70, child: Text('FRET 3', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
+                      ],
+                      isSelected: frets1_3select,
+                      onPressed: (int index){
+                        setState(() {
+                          frets1_3select[index] = !frets1_3select[index];
+                        });
+                      },
+                      color: Colors.white38,
+                      selectedColor: Colors.white,
+                      fillColor: Colors.indigo,
+                      renderBorder: false,
+                      splashColor: Colors.white,
+                      spacing: 5.0,
+                      constraints: const BoxConstraints(minWidth: 40.0, minHeight: 42.0),
+                    ),
+
+                    fretsSelect[1] ?
+                    CustomToggleButtons(
+                      direction : Axis.vertical,
+                      children: const [
+                        SizedBox(width: 70, child: Text('FRET 4', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
+                        SizedBox(width: 70, child: Text('FRET 5', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
+                        SizedBox(width: 70, child: Text('FRET 6', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
+                      ],
+                      isSelected: frets4_6select,
+                      color: Colors.white38,
+                      selectedColor: Colors.white,
+                      fillColor: Colors.indigo,
+                      renderBorder: false,
+                      splashColor: Colors.white,
+                      spacing: 5.0,
+                      constraints: const BoxConstraints(minWidth: 40.0, minHeight: 42.0),
+                      disabledFillColor: Colors.black26,
+                    )
+
+                        :
+
+                    CustomToggleButtons(
+                      direction : Axis.vertical,
+                      children: const [
+                        SizedBox(width: 70, child: Text('FRET 4', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
+                        SizedBox(width: 70, child: Text('FRET 5', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
+                        SizedBox(width: 70, child: Text('FRET 6', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
+                      ],
+                      isSelected: frets4_6select,
+                      onPressed: (int index){
+                        setState(() {
+                          frets4_6select[index] = !frets4_6select[index];
+                        });
+                      },
+                      color: Colors.white38,
+                      selectedColor: Colors.white,
+                      fillColor: Colors.indigo,
+                      renderBorder: false,
+                      splashColor: Colors.white,
+                      spacing: 5.0,
+                      constraints: const BoxConstraints(minWidth: 40.0, minHeight: 42.0),
+                    ),
+
+                    fretsSelect[2] ?
+                    CustomToggleButtons(
+                      direction : Axis.vertical,
+                      children: const [
+                        SizedBox(width: 70, child: Text('FRET 7', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
+                        SizedBox(width: 70, child: Text('FRET 8', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
+                        SizedBox(width: 70, child: Text('FRET 9', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
+                      ],
+                      isSelected: frets7_9select,
+                      color: Colors.white38,
+                      selectedColor: Colors.white,
+                      fillColor: Colors.indigo,
+                      renderBorder: false,
+                      splashColor: Colors.white,
+                      spacing: 5.0,
+                      constraints: const BoxConstraints(minWidth: 40.0, minHeight: 42.0),
+                      disabledFillColor: Colors.black26,
+                    )
+
+                        :
+
+                    CustomToggleButtons(
+                      direction : Axis.vertical,
+                      children: const [
+                        SizedBox(width: 70, child: Text('FRET 7', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
+                        SizedBox(width: 70, child: Text('FRET 8', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
+                        SizedBox(width: 70, child: Text('FRET 9', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
+                      ],
+                      isSelected: frets7_9select,
+                      onPressed: (int index){
+                        setState(() {
+                          frets7_9select[index] = !frets7_9select[index];
+                        });
+                      },
+                      color: Colors.white38,
+                      selectedColor: Colors.white,
+                      fillColor: Colors.indigo,
+                      renderBorder: false,
+                      splashColor: Colors.white,
+                      spacing: 5.0,
+                      constraints: const BoxConstraints(minWidth: 40.0, minHeight: 42.0),
+                    ),
+
+
+                    fretsSelect[3] ?
+                    CustomToggleButtons(
+                      direction : Axis.vertical,
+                      children: const [
+                        SizedBox(width: 70, child: Text('FRET 10', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
+                        SizedBox(width: 70, child: Text('FRET 11', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
+                        SizedBox(width: 70, child: Text('FRET 12', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
+                      ],
+                      isSelected: frets10_12select,
+                      color: Colors.white38,
+                      selectedColor: Colors.white,
+                      fillColor: Colors.indigo,
+                      renderBorder: false,
+                      splashColor: Colors.white,
+                      spacing: 5.0,
+                      constraints: const BoxConstraints(minWidth: 40.0, minHeight: 42.0),
+                      disabledFillColor: Colors.black26,
+                    )
+
+                        :
+
+                    CustomToggleButtons(
+                      direction : Axis.vertical,
+                      children: const [
+                        SizedBox(width: 70, child: Text('FRET 10', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
+                        SizedBox(width: 70, child: Text('FRET 11', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
+                        SizedBox(width: 70, child: Text('FRET 12', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
+                      ],
+                      isSelected: frets10_12select,
+                      onPressed: (int index){
+                        setState(() {
+                          frets10_12select[index] = !frets10_12select[index];
+                        });
+                      },
+                      color: Colors.white38,
+                      selectedColor: Colors.white,
+                      fillColor: Colors.indigo,
+                      renderBorder: false,
+                      splashColor: Colors.white,
+                      spacing: 5.0,
+                      constraints: const BoxConstraints(minWidth: 40.0, minHeight: 42.0),
+                    ),
+
+                  ],
+                ),],
+            )
+
+
+                ),
+
+                SizedBox(height: 31,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          primary: Colors.indigo,
+                          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                          textStyle: const TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold)),
+                      onPressed: () {
+                        setAll(true);
+                      },
+                      child: const Text('ALL'),
+                    ),
+
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          primary: Colors.indigo,
+                          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                          textStyle: const TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold)),
+                      onPressed: () {
+                        setAll(false);
+                      },
+                      child: const Text('NONE'),
+                    ),
+
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          primary: Colors.indigo,
+                          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                          textStyle: const TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold)),
+                      onPressed: () {
+                        proceed();
+                        parentScreenFunction();
+
+                        // Respond to button press
+                      },
+                      child: const Text('NEXT'),
+                    ),
+                  ],
+                ),
+
+            ],),
         ));
   }
 }

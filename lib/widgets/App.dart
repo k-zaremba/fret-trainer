@@ -13,13 +13,11 @@ class App extends StatefulWidget {
   App({required this.parentStateFunction, required this.inGameNotes});
 
   @override
-  AppState createState() => AppState(parentStateFunction);
+  AppState createState() => AppState();
 }
 
 class AppState extends State<App> {
-  AppState(Function() fun) : callParent = fun;
-
-  Function() callParent;
+  late Function() callParent;
   final CircleController myController = CircleController();
 
   List<Note>? notesList;
@@ -36,6 +34,7 @@ class AppState extends State<App> {
   Note? targetNote;
   bool? isOnNote;
   int? timeOnNote;
+  double? counter;
 
   FlutterFft flutterFft = new FlutterFft();
 
@@ -62,12 +61,12 @@ class AppState extends State<App> {
               frequency = data[1] as double,
               note = data[2] as String,
               octave = data[5] as int,
-              currentNote = noteValidator?.findClosestNote(frequency!),
+              currentNote = noteValidator?.findClosestNoteFromAll(frequency!),
               myController.setNote(currentNote!),
               isOnNote = targetNote == currentNote,
-            },
+            },),
 
-            ),
+
             if(isOnNote!){
                 setState(() => {
                   timeOnNote = (timeOnNote! + 1),
@@ -111,11 +110,28 @@ class AppState extends State<App> {
         onDone: () => {print("Isdone")});
   }
 
+  void startTimer() async {
+    setState(() {
+      counter = 0;
+    });
+
+      Timer.periodic(Duration(milliseconds: 100), (timer) {
+          if(counter! < 10){setState(() {
+            counter = (counter! + 0.1);
+          });}else{
+            timer.cancel();
+            getTarget(currentNote!);
+            super.dispose();
+          }
+      });
+  }
+
   @override
   void initState() {
 
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
 
+    callParent = widget.parentStateFunction;
     List<Note> notes = widget.inGameNotes;
 
     noteValidator = NoteValidator(notes);
@@ -123,13 +139,24 @@ class AppState extends State<App> {
     currentNote = Note.NULL;
     isOnNote = false;
     timeOnNote = 0;
+    counter = 0;
 
     isRecording = flutterFft.getIsRecording;
     frequency = flutterFft.getFrequency;
     note = flutterFft.getNote;
     octave = flutterFft.getOctave;
     started = false;
+
+
+    print(noteValidator);
+    print(noteValidator?.freqs());
+
     super.initState();
+  }
+
+  Note getTarget(Note currNote){
+    startTimer();
+    return noteValidator!.getTarget(currNote);
   }
 
   @override
@@ -195,34 +222,52 @@ class AppState extends State<App> {
                         style: const TextStyle(fontSize: 18, letterSpacing: 3))
                         : const SizedBox(width: 0, height: 0,),
 
+                    const SizedBox(height: 20),
+                    //
+                    // started!
+                    //     ? Text(counter!.toStringAsFixed(1),
+                    //     style: const TextStyle(fontSize: 18, letterSpacing: 3))
+                    //     : const SizedBox(width: 0, height: 0,),
+
                   ],),
               ),
+
+                SizedBox(height: 50,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    RawMaterialButton(
-                        onPressed: () {
-                          callParent();
-                        },
-                        child: const Text('BACK',
-                            style: TextStyle(
-                                color: Colors.indigo,
-                                fontSize: 40 )
-                        )
-                    ),
 
-                    RawMaterialButton(
+                    !started! ? ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            primary: Colors.indigo,
+                            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                            textStyle: const TextStyle(
+                                fontSize: 25,
+                                fontWeight: FontWeight.bold)),
                         onPressed: () {
                           _initialize();
                           setState(() {
                             started = !started!;
                           });
+                          // Respond to button press
                         },
-                        child: const Text('START',
-                            style: TextStyle(
-                                color: Colors.indigo,
-                                fontSize: 40 )
-                        )
+                        child: const Text('START'),
+                    )
+                        :
+
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          primary: Colors.indigo,
+                          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                          textStyle: const TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold)),
+                      onPressed: () {
+                        callParent();
+                        flutterFft.stopRecorder();
+                        // Respond to button press
+                      },
+                      child: Text('BACK'),
                     ),
                   ],
                 ),
