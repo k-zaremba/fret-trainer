@@ -24,19 +24,19 @@ class Note {
 
   static List<double> getNotesFrequencies(List<Note> notes){
     List<double> freqList = [];
-    notes.forEach((note) {
+    for (var note in notes) {
         freqList.add(note.freq());
-      });
+      }
     return freqList;
   }
 
   static List<Note> getNotesList(List octaves){
     List<Note> notesList = [];
-    octaves.forEach((element) {
+    for (var element in octaves) {
       element.forEach((note) {
         notesList.add(note);
       });
-    });
+    }
     return notesList;
   }
 

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fretapp/utility/Note.dart';
@@ -224,7 +223,7 @@ class HomeState extends State<Home> {
                     octavesSelect[0] ?
                     CustomToggleButtons(
                       direction : Axis.vertical,
-                      children:  notesToButtons(o2), // tutaj daje oktawe
+                      children:  notesToButtons(o2),
                       isSelected: o2select,
                       color: Colors.white38,
                       selectedColor: Colors.white,
@@ -240,7 +239,7 @@ class HomeState extends State<Home> {
 
                     CustomToggleButtons(
                       direction : Axis.vertical,
-                      children:  notesToButtons(o2), // tutaj daje oktawe
+                      children:  notesToButtons(o2),
                       isSelected: o2select,
                       onPressed: (int index){
                         setState(() {
@@ -260,7 +259,7 @@ class HomeState extends State<Home> {
                     octavesSelect[1] ?
                     CustomToggleButtons(
                       direction : Axis.vertical,
-                      children:  notesToButtons(o3), // tutaj daje oktawe
+                      children:  notesToButtons(o3),
                       isSelected: o3select,
                       color: Colors.white38,
                       selectedColor: Colors.white,
@@ -276,7 +275,7 @@ class HomeState extends State<Home> {
 
                     CustomToggleButtons(
                       direction : Axis.vertical,
-                      children:  notesToButtons(o3), // tutaj daje oktawe
+                      children:  notesToButtons(o3),
                       isSelected: o3select,
                       onPressed: (int index){
                         setState(() {
@@ -296,7 +295,7 @@ class HomeState extends State<Home> {
                     octavesSelect[2] ?
                     CustomToggleButtons(
                       direction : Axis.vertical,
-                      children:  notesToButtons(o4), // tutaj daje oktawe
+                      children:  notesToButtons(o4),
                       isSelected: o4select,
                       color: Colors.white38,
                       selectedColor: Colors.white,
@@ -332,7 +331,7 @@ class HomeState extends State<Home> {
                     octavesSelect[3] ?
                     CustomToggleButtons(
                       direction : Axis.vertical,
-                      children:  notesToButtons(o5), // tutaj daje oktawe
+                      children:  notesToButtons(o5),
                       isSelected: o5select,
                       color: Colors.white38,
                       selectedColor: Colors.white,
@@ -347,7 +346,7 @@ class HomeState extends State<Home> {
                         :
                     CustomToggleButtons(
                       direction : Axis.vertical,
-                      children:  notesToButtons(o5), // tutaj daje oktawe
+                      children:  notesToButtons(o5),
                       isSelected: o5select,
                       onPressed: (int index){
                         setState(() {
@@ -369,7 +368,7 @@ class HomeState extends State<Home> {
             )
             :
             Column(
-              children: [ //TODO: FRETS
+              children: [
                 CustomToggleButtons(
                   children: const [
                     SizedBox(width: 70, child: Text('1 - 3', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600, fontSize: 17),textAlign: TextAlign.center,)),

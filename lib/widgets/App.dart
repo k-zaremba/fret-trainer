@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_fft/flutter_fft.dart';
 import 'package:fretapp/utility/NoteValidator.dart';
 import 'package:fretapp/utility/Note.dart';
-import 'package:fretapp/widgets/AnimCircle.dart';
+import 'package:fretapp/widgets/Sprite.dart';
 
 class App extends StatefulWidget {
   final Function() parentStateFunction;
@@ -18,7 +18,7 @@ class App extends StatefulWidget {
 
 class AppState extends State<App> {
   late Function() callParent;
-  final CircleController myController = CircleController();
+  final SpriteController myController = SpriteController();
 
   List<Note>? notesList;
   List<double>? notesFreq;
@@ -39,11 +39,6 @@ class AppState extends State<App> {
   FlutterFft flutterFft = new FlutterFft();
 
   _initialize() async {
-    print("Starting recorder...");
-    // print("Before");
-    // bool hasPermission = await flutterFft.checkPermission();
-    // print("After: " + hasPermission.toString());
-
     // Keep asking for mic permission until accepted
     while (!(await flutterFft.checkPermission())) {
       flutterFft.requestPermission();
@@ -52,7 +47,6 @@ class AppState extends State<App> {
 
     // await flutterFft.checkPermissions();
     await flutterFft.startRecorder();
-    print("Recorder started...");
     setState(() => isRecording = flutterFft.getIsRecording);
     flutterFft.onRecorderStateChanged.listen(
               (data) => {
@@ -91,12 +85,14 @@ class AppState extends State<App> {
                 myController.reset(),
             },
 
-            if(timeOnNote==1){
-              myController.resize(40.0, const Color(0xFF30BD00).withOpacity(0.8)),
-            }else if(timeOnNote==4){
-              myController.resize(70.0, const Color(0xFF30BD00).withOpacity(0.6)),
+            if(timeOnNote==2){
+              myController.resize(90.0),
+            }else if(timeOnNote==5){
+              myController.resize(105.0),
             }else if(timeOnNote==7){
-              myController.resize(100.0, const Color(0xFF30BD00).withOpacity(0.4)),
+              myController.resize(120.0),
+            }else if(timeOnNote==9){
+              myController.resize(135.0),
             },
 
             flutterFft.setNote = note!,
@@ -115,7 +111,7 @@ class AppState extends State<App> {
       counter = 0;
     });
 
-      Timer.periodic(Duration(milliseconds: 100), (timer) {
+      Timer.periodic(const Duration(milliseconds: 100), (timer) {
           if(counter! < 10){setState(() {
             counter = (counter! + 0.1);
           });}else{
@@ -206,10 +202,10 @@ class AppState extends State<App> {
                     started!
                         ? SizedBox(
                       width: 300,
-                      height: 70,
+                      height: 150,
                       child: Center(
-                        child: AnimCircle(
-                          circleController: myController,
+                        child: SpriteAnimation(
+                          spriteController: myController,
                         ),
                       ),
                     )
@@ -232,7 +228,7 @@ class AppState extends State<App> {
                   ],),
               ),
 
-                SizedBox(height: 50,),
+                const SizedBox(height: 50,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -267,7 +263,7 @@ class AppState extends State<App> {
                         flutterFft.stopRecorder();
                         // Respond to button press
                       },
-                      child: Text('BACK'),
+                      child: const Text('BACK'),
                     ),
                   ],
                 ),

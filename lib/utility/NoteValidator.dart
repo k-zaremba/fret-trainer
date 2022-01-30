@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:fretapp/utility/Note.dart';
 
 void main() {
@@ -7,12 +6,7 @@ void main() {
   List<Note> notes = Note.getNotesList([Note.FRET1, Note.FRET2, Note.FRET3]);
   notes.sort((a, b) => a.freq().compareTo(b.freq()));
   notes = notes.toSet().toList();
-
   NoteValidator validator = NoteValidator(notes);
-  print(validator.getAllFreqs());
-  double fr = 670.0;
-  print(validator.findClosestNoteFromAll(fr).freq());
- // print(validator.findClosestNoteFromAll(fr));
 }
 
 class NoteValidator {
@@ -150,7 +144,7 @@ class NoteValidator {
       }
     }
 
-    if (mid == _allFreq!.length - 1) { //TODO: sprawdzic warunek na tolerance nizej
+    if (mid == _allFreq!.length - 1) {
       double lowerAbs = (_allFreq![mid - 1] - userFreq).abs();
       double higherAbs = (_allFreq![mid] - userFreq).abs();
       double tolerance = (_allFreq![mid] - _allFreq![mid - 1]) / 2;
