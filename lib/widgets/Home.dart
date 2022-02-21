@@ -6,8 +6,10 @@ import 'package:customtogglebuttons/customtogglebuttons.dart';
 class Home extends StatefulWidget {
   final Function() parentScreenFunction;
   final Function(List<Note>) parentNoteFunction;
+  final Function(int) parentTimeFunction;
 
-  Home({required this.parentScreenFunction, required this.parentNoteFunction});
+
+  Home({required this.parentScreenFunction, required this.parentNoteFunction, required this.parentTimeFunction});
 
   @override
   HomeState createState() => HomeState();
@@ -17,6 +19,7 @@ class HomeState extends State<Home> {
 
   late Function() parentScreenFunction;
   late Function(List<Note>) parentNoteFunction;
+  late Function(int) parentTimeFunction;
 
   bool? started;
   List<Note> o2 = Note.OCTAVE2;
@@ -41,6 +44,9 @@ class HomeState extends State<Home> {
   List<bool> fretsSelect = List.generate(4, (index) => true);
 
   List<bool> tabSelect = [true, false];
+  List<bool> timeSelect = [false, true, false, false];
+
+  int tta = 8;
 
   @override
   void initState() {
@@ -49,6 +55,8 @@ class HomeState extends State<Home> {
     setState(() {
       parentNoteFunction = widget.parentNoteFunction;
       parentScreenFunction = widget.parentScreenFunction;
+      parentTimeFunction = widget.parentTimeFunction;
+
       o2select = List.generate(o2.length, (index) => true);
       o3select = List.generate(o3.length, (index) => true);
       o4select = List.generate(o4.length, (index) => true);
@@ -72,6 +80,23 @@ class HomeState extends State<Home> {
       }else{
         tabSelect[0] = false;
         tabSelect[1] = true;
+      }
+    });
+  }
+
+  void toggleTime(int index){
+    setState(() {
+      timeSelect = List.generate(4, (index) => false);
+      timeSelect[index] = true;
+
+      if(index == 0) {
+        tta = 5;
+      }else if(index == 1){
+        tta = 8;
+      }else if(index == 2){
+        tta = 15;
+      }else if(index == 3) {
+        tta = 999999;
       }
     });
   }
@@ -150,6 +175,7 @@ class HomeState extends State<Home> {
     notes.sort((a, b) => a.freq().compareTo(b.freq()));
     notes = notes.toSet().toList();
     parentNoteFunction(notes);
+    parentTimeFunction(tta);
   }
 
   @override
@@ -569,14 +595,38 @@ class HomeState extends State<Home> {
                       constraints: const BoxConstraints(minWidth: 40.0, minHeight: 42.0),
                     ),
 
+
+                  ],),
+                const SizedBox(height: 100,),
+                const Text('TIME FOR ANSWER', style: TextStyle(letterSpacing: 1, fontSize: 20, color: Colors.grey, fontWeight: FontWeight.w600),textAlign: TextAlign.center,),
+                const SizedBox(height: 20,),
+                CustomToggleButtons(
+                  direction : Axis.horizontal,
+                  children: const [
+                    SizedBox(width: 70, child: Text('5s', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
+                    SizedBox(width: 70, child: Text('8s', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
+                    SizedBox(width: 70, child: Text('15s', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
+                    SizedBox(width: 70, child: Text('NO LIMIT', style: TextStyle(letterSpacing: 1, fontWeight: FontWeight.w600),textAlign: TextAlign.center,)),
                   ],
-                ),],
-            )
+                  isSelected: timeSelect,
+                  onPressed: (int index){
+                    toggleTime(index);
+                  },
+                  color: Colors.white38,
+                  selectedColor: Colors.white,
+                  fillColor: Colors.indigo,
+                  renderBorder: false,
+                  splashColor: Colors.white,
+                  spacing: 5.0,
+                  constraints: const BoxConstraints(minWidth: 40.0, minHeight: 42.0),
+                  disabledFillColor: Colors.black26,
+                )
+              ],)
 
 
                 ),
 
-                SizedBox(height: 31,),
+                const SizedBox(height: 31,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

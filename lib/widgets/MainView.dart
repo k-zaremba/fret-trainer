@@ -13,6 +13,7 @@ class MainView extends StatefulWidget {
 class _MainViewState extends State<MainView> {
   bool? isStarted;
   late List<Note> inGameNotes;
+  late int timeToAnswer;
 
   toggleScreen() {
     setState(() {
@@ -23,6 +24,12 @@ class _MainViewState extends State<MainView> {
   setInGameNotes(List<Note> notes) {
     setState(() {
       inGameNotes = notes;
+    });
+  }
+
+  setTTA(int timeToAnswer) {
+    setState(() {
+      this.timeToAnswer = timeToAnswer;
     });
   }
 
@@ -37,12 +44,14 @@ class _MainViewState extends State<MainView> {
       child: !isStarted! ?  Home(
         parentScreenFunction: toggleScreen,
         parentNoteFunction: setInGameNotes,
+        parentTimeFunction: setTTA
       )
           :
 
           App(
             parentStateFunction: toggleScreen,
-            inGameNotes: inGameNotes,)
+            inGameNotes: inGameNotes,
+            timeToAnswer: timeToAnswer)
     );
   }
 }
