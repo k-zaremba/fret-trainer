@@ -1,16 +1,13 @@
-# fretapp
+# FretApp
 
-A new Flutter project.
+Little hobby project connecting programming with my passion for music. 
 
-## Getting Started
+The app is intended for guitarists wanting to learn and practice notes positions on guitar fretboard. You can choose training set of notes between standard guitar octaves & frets or create your own.
 
-This project is a starting point for a Flutter application.
+<img src="https://github.com/k-zaremba/fret-trainer/blob/main/blob/screen1.png?raw=true" alt="menu1" width="200"/>
 
-A few resources to get you started if this is your first Flutter project:
+<img src="https://github.com/k-zaremba/fret-trainer/blob/main/blob/screen2.png?raw=true" alt="menu2" width="200"/>
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+<img src="https://github.com/k-zaremba/fret-trainer/blob/main/blob/screen3.png?raw=true" alt="app" width="200"/>
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Application is not fully developed yet.  
